@@ -1,0 +1,71 @@
+Link: http://lcas.lincoln.ac.uk/fast-downward/
+
+DOMINIO:
+
+(define (domain cargas-aeropuertos)
+   (:predicates
+    	;Tipos de objetos
+    	(avion ?p)
+    	(aeropuerto ?a)
+    	(carga ?c)
+    	;Relaciones entre objetos
+		(en ?x ?y)) ;x esta en y
+
+   (:action ir
+       :parameters  (?p ?desde ?hasta)
+       :precondition (and (avion ?p)
+                          (aeropuerto ?desde)
+                          (aeropuerto ?hasta)
+                          (en ?p ?desde))
+       :effect (and  (en ?p ?hasta)
+                     (not (en ?p ?desde))))
+
+   (:action cargar
+       :parameters (?c ?p ?a)
+       :precondition  (and  (carga ?c)
+                            (avion ?p)
+                            (aeropuerto ?a)
+                       		(en ?c ?a)
+                            (en ?p ?a))
+       :effect (and (en ?c ?p)
+		   			(not (en ?c ?a))))
+
+
+   (:action descargar
+       :parameters (?c ?p ?a)
+       :precondition  (and  (carga ?c)
+                            (avion ?p)
+                            (aeropuerto ?a)
+                       		(en ?c ?p)
+                            (en ?p ?a))
+       :effect (and (en ?c ?a)
+		   			(not (en ?c ?p))))
+)
+
+PROBLEMA
+
+(define 
+    (problem transporteCajasAeropuerto)
+    (:domain cargas-aeropuertos)
+    (:objects avion1 caja1 caja2 aeropuerto1 aeropuerto2)
+    (:INIT
+   		;Defino tipo de objetos
+     	(avion avion1)
+     	(carga caja1)
+     	(carga caja2)
+     	(aeropuerto aeropuerto1)
+     	(aeropuerto aeropuerto2)
+    	;Condiciones iniciales
+        (en caja1 aeropuerto1) ;caja1 en aeropuerto1
+        (en caja2 aeropuerto2) ;caja2 en aeropuerto2
+     	(en avion1 aeropuerto1) ;avion1 en aeropuerto1
+     	)
+    (:goal	
+        ;El objetivo es llevar la caja1 al aeropuerto2
+     	;y la caja2 al aeropuerto1
+     	(AND 
+          (en caja1 aeropuerto2)
+          (en caja2 aeropuerto1)
+          )
+    )
+)
