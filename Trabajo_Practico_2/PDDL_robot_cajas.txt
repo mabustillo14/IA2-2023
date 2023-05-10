@@ -1,0 +1,77 @@
+Link: http://lcas.lincoln.ac.uk/fast-downward/
+
+DOMINIO: 
+
+(define (domain apilarCajas)
+  (:requirements :strips)
+  (:predicates 	(sobre ?x ?y)	;caja x sobre y
+           		(enMesa ?x)		;caja x en la mesa
+           		(liberado ?x)	;caja x sin nada encima
+           		(manoLibre)		;mano disponible para agarrar
+          		(agarrado ?x)	;mano agarrando caja x
+           )
+
+  ;Si ?x esta en la mesa, sin nada encima, y la mano vacia
+  (:action agarrar
+         :parameters (?x)
+         :precondition (and (liberado ?x) (enMesa ?x) (manoLibre))
+         :effect(and (not (enMesa ?x))
+                     (not (liberado ?x))
+                     (not (manoLibre))
+                     (agarrado ?x)))
+
+  ;Si tengo a ?x agarrado, la coloco en un lugar vacio de la mesa
+  (:action ponerEnMesa
+         :parameters (?x)
+         :precondition (agarrado ?x)
+         :effect(and (not (agarrado ?x))
+                     (liberado ?x)
+                     (manoLibre)
+                     (enMesa ?x)))
+  
+  ;Si tengo agarrado a ?x, y no hay nada encima de ?y, puedo
+  ;apilar a ?x encima de ?y.
+  (:action apilar
+         :parameters (?x ?y)
+         :precondition (and (agarrado ?x) (liberado ?y))
+         :effect(and (not (agarrado ?x))
+                     (not (liberado ?y))
+                     (liberado ?x)
+                     (manoLibre)
+                     (sobre ?x ?y)))
+  
+  ;Agarro ?x si ?x esta encima de ?y, y ?x no tiene nada encima.
+  (:action desapilar
+         :parameters (?x ?y)
+         :precondition (and (sobre ?x ?y) (liberado ?x) (manoLibre))
+         :effect(and (agarrado ?x)
+                     (liberado ?y)
+                     (not (liberado ?x))
+                     (not (manoLibre))
+                     (not (sobre ?x ?y)))))
+
+PROBLEMA
+
+(define 
+    (problem cajasDesordenadas)
+    (:domain apilarCajas)
+    (:objects tornillos clavos arandelas tuercas)
+    (:INIT
+     	;Posicion inicial de abajo hacia arriba:
+     	;Mesa-tornillos-clavos-tuercas-arandelas
+        (liberado arandelas) 
+        (enMesa tornillos)
+     	(sobre clavos tornillos)
+     	(sobre tuercas clavos) 
+        (sobre arandelas tuercas)
+        (manoLibre))
+    (:goal
+     	;Lograr la siguiente posicion:
+     	;Mesa-clavos-tuercas-arandelas-tornillos
+     		(AND 
+        		(sobre tuercas clavos)
+        		(sobre arandelas tuercas)
+            	(sobre tornillos arandelas)
+      		)
+    )
+)
