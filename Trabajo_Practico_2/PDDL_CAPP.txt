@@ -1,0 +1,58 @@
+Link: http://lcas.lincoln.ac.uk/fast-downward/
+
+DOMINIO:
+
+(define (domain CAPP)
+   (:predicates
+    	;Tipos de objetos
+    	(pieza ?p)
+    	(herramienta ?h)
+    	(maquina ?m)
+    	(orientacion ?o)
+    	(operacion ?op)
+    	;Relaciones entre objetos
+		(en ?x ?y) ;x esta en y
+  		(sujetada ?p) ;la pieza está sujetada
+    	(herr_actual ?h); herramienta actual
+    	(orie_actual ?o); orientacion actual
+    	(realizada ?op); operacion realizada
+   )
+	
+   (:action sujetar
+       :parameters  (?p)
+       :precondition (and (pieza ?p)
+                          (not (sujetada ?p))
+                          )
+       :effect (sujetada ?p)
+            )
+  
+  (:action soltar
+       :parameters  (?p)
+       :precondition (and (pieza ?p)
+                          (sujetada ?p)
+                          )
+       :effect (not (sujetada ?p))
+            )
+  
+   (:action rotar
+       :parameters  (?inicial ?final)
+       :precondition (and (orientacion ?inicial)
+                          (orientacion ?final)
+                          (orie_actual ?inicial)
+                          )
+       :effect (and  (orie_actual ?final)
+                     (not (orie_actual ?inicial))
+                     )
+            )
+
+   (:action cambiar_herramienta
+       :parameters (?h1 ?h2)
+       :precondition  (and  (herramienta ?h1)
+                            (herramienta ?h2)
+                            (herr_actual ?h1)
+                            )
+       :effect (and (herr_actual ?h2)
+		   			(not (herr_actual ?h1))
+                    )
+            )
+  )
