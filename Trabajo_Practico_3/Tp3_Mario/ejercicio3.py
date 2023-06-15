@@ -155,7 +155,7 @@ def train(x, t, pesos, learning_rate, epochs, cantidad_clases, numero_ejemplos, 
 
             # Ejercicio 2.a
             Precision(x, t, pesos, "entrenamiento")
-            print("\n")
+            #print("\n")
 
         # Extraemos los pesos a variables locales
         w1 = pesos["w1"]
@@ -196,13 +196,14 @@ def train(x, t, pesos, learning_rate, epochs, cantidad_clases, numero_ejemplos, 
         if i%cant_test == 0:
             precision_validacion = Precision(x_validacion, t_validacion, pesos, "validacion", False)
 
-            if(precision_validacion>=precision_val_anterior*0.98):
+            if(precision_validacion>precision_val_anterior*0.985):
                 precision_val_anterior = precision_validacion
             else:
                 print("Fin del entrenamiento")
                 break
 
     # Ejercicio 2.b
+    print("\n")
     x_test,t_test=generar_datos_clasificacion(int(numero_ejemplos*0.2), cantidad_clases)
     Precision(x_test, t_test, pesos, "test")
 

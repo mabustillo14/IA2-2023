@@ -249,7 +249,7 @@ def train(x, t, pesos, learning_rate, epochs, cantidad_clases, numero_ejemplos, 
         if i%cant_test == 0:
             precision_validacion = Precision(x_validacion, t_validacion, pesos, "validacion", False)
 
-            if(precision_validacion>=precision_val_anterior*0.98):
+            if(precision_validacion>precision_val_anterior*0.985):
                 precision_val_anterior = precision_validacion
             else:
                 print("Fin del entrenamiento")
@@ -303,7 +303,7 @@ def iniciar(condicion, numero_clases, numero_ejemplos, graficar_datos, FACTOR_AN
 
         #plt.show()
 
-        path_img = 'Ejercicio4_caso_'+ condicion + "_" + str(numero_clases) + "_" + str(numero_ejemplos) +'.png'
+        path_img = '../graficos/Ejercicio4_caso_'+ condicion + "_" + str(numero_clases) + "_" + str(numero_ejemplos) +'.png'
         plt.savefig(path_img)
 
     # Inicializa pesos de la red
@@ -329,10 +329,10 @@ iniciar(condicion="Original",numero_clases=5, numero_ejemplos=500, graficar_dato
 iniciar(condicion="Original",numero_clases=7, numero_ejemplos=300, graficar_datos=True)
 
 # GENERADOR DE DATOS MODIFICADO - Ejercicio 4.a
-iniciar(condicion="Modificado",numero_clases=2, numero_ejemplos=300, graficar_datos=True) # 3 clases con 100 ejemplos cada una
-iniciar(condicion="Modificado",numero_clases=4, numero_ejemplos=400, graficar_datos=True) # 3 clases con 100 ejemplos cada una
+iniciar(condicion="Modificado",numero_clases=2, numero_ejemplos=300, graficar_datos=False) # 3 clases con 100 ejemplos cada una
+iniciar(condicion="Modificado",numero_clases=4, numero_ejemplos=400, graficar_datos=False) # 3 clases con 100 ejemplos cada una
 
 # GENERADOR DE DATOS CIRCULARES - Ejercicio 4.b
-iniciar(condicion="Circulos",numero_clases=2, numero_ejemplos=200, graficar_datos=True) # 3 clases con 100 ejemplos cada una
-iniciar(condicion="Circulos",numero_clases=2, numero_ejemplos=300, graficar_datos=True) # 3 clases con 100 ejemplos cada una
-iniciar(condicion="Circulos",numero_clases=2, numero_ejemplos=400, graficar_datos=True) # 3 clases con 100 ejemplos cada una
+iniciar(condicion="Circulos",numero_clases=2, numero_ejemplos=200, graficar_datos=False) # 3 clases con 100 ejemplos cada una
+iniciar(condicion="Circulos",numero_clases=2, numero_ejemplos=300, graficar_datos=False) # 3 clases con 100 ejemplos cada una
+iniciar(condicion="Circulos",numero_clases=2, numero_ejemplos=400, graficar_datos=False) # 3 clases con 100 ejemplos cada una
